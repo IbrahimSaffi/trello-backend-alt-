@@ -22,11 +22,12 @@ const userSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'task'
         }],
-        date: {
-            type: Date,
-            default: Date.now
+        active: {
+            type: Boolean,
+            default: false
         },
-    }
+    },
+    {timestamps : true}
 )
 
 const userModel = mongoose.model("user", userSchema)

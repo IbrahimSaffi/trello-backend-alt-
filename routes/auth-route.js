@@ -31,6 +31,7 @@ router.post('/signin', async (req, res) => {
     const result = bcrypt.compareSync(password, existingUser.password)
     if (result) {
         const payload = { _id: existingUser._id, name: existingUser.name, email }
+        const updateUser = await userModel.findOne({ email: email }, {active: true})
         const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRATION_TIME })
         const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRATION_TIME })
         return res.status(200).json({ refreshToken, accessToken, payload })
@@ -50,6 +51,12 @@ router.post('/token', async (req, res) => {
         res.status(401).json({ error: "Invalid refresh token Provided " + error.message })
     }
 })
+
+// router.get('/signout', async (req, res) => {
+//     const updateUser = await userModel.findOne({ _id: req.payload._id }, { active: false })
+//     return res.status(200).json({ alert: "Signout Successful"})
+
+// })
 
 
 module.exports = router
