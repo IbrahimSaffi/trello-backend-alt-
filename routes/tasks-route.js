@@ -16,6 +16,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
+
 //Get all tasks
 router.get('/', async (req, res) => {
     const tasks = await taskModel.find({})
@@ -51,6 +52,7 @@ router.post('/add', upload.single('image'), async (req, res) => {
 })
 
 
+// Get all user info
 router.get('/get-all-user', async (req, res) => {
     const users = await userModel.find({}, {password: 0})
     res.status(200).json({ data: users })
