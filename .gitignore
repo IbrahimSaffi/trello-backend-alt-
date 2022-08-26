@@ -1,0 +1,9 @@
+node_modules/
+
+.vs_code/
+
+.DS_STORE
+
+.env
+
+public/uploads
