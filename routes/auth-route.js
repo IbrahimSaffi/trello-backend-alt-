@@ -17,7 +17,7 @@ router.post('/signup', async (req, res) => {
     try {
         const savedUser = await newUesr.save()
         frontendUser._id = savedUser._id
-        res.status(201).json({ data: frontendUser })
+        res.status(201).json({ data: frontendUser, alert: "Signup Successful" })
     } catch (e) {
         res.status(501).json({ error: e.message })
     }
@@ -26,15 +26,14 @@ router.post('/signup', async (req, res) => {
 router.post('/signin', async (req, res) => {
     const { email, password } = req.body
     if (!email || !password) return res.status(400).json({ error: 'Please provide email and password' })
-    const existingUser = await userModel.findOne({ email: email })
+    const existingUser = await userModel.findOne({ email: email.toLowarCase() })
     if (existingUser === null) return res.status(400).json({ error: 'User not found' })
     const result = bcrypt.compareSync(password, existingUser.password)
     if (result) {
-        const payload = { _id: existingUser._id, name: existingUser.name, email }
-        const updateUser = await userModel.findOne({ email: email }, {active: true})
+        const payload = { _id: existingUser._id, name: existingUser.name, email: email.toLowarCase() }
         const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRATION_TIME })
         const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRATION_TIME })
-        return res.status(200).json({ refreshToken, accessToken, payload })
+        return res.status(200).json({ data: { refreshToken, accessToken, payload } })
     }
     else return res.status(400).json({ error: 'Wrong Password' })
 })
@@ -46,17 +45,11 @@ router.post('/token', async (req, res) => {
         delete payload.exp
         delete payload.iat
         const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRATION_TIME })
-        return res.status(200).json({ accessToken })
+        return res.status(200).json({ data: accessToken })
     } catch (error) {
         res.status(401).json({ error: "Invalid refresh token Provided " + error.message })
     }
 })
-
-// router.get('/signout', async (req, res) => {
-//     const updateUser = await userModel.findOne({ _id: req.payload._id }, { active: false })
-//     return res.status(200).json({ alert: "Signout Successful"})
-
-// })
 
 
 module.exports = router
