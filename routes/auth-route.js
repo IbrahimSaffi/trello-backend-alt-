@@ -47,7 +47,7 @@ router.post('/token', async (req, res) => {
         const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRATION_TIME })
         return res.status(200).json({ data: accessToken })
     } catch (error) {
-        res.status(401).json({ error: "Invalid refresh token Provided " + error.message })
+        res.status(401).json({ error: "Invalid refresh token Provided" })
     }
 })
 
