@@ -11,6 +11,10 @@ const taskSchema = new mongoose.Schema(
             ref: 'user',
             // required: true
         },
+        members:[{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'user',
+        }],
         description: {
             type: String,
             required: true
@@ -19,13 +23,17 @@ const taskSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'user'
         },
-        dueDate: {
-            type: Date,
-            required: true
-        },
+        // dueDate: {
+        //     type: Date,
+        //     required: true
+        // },
         labels: {
             type: String,
             required: true
+        },
+        status: {
+            type: String,
+            default:"pending"
         },
     }
 )

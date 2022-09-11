@@ -12,7 +12,7 @@ const morgan = require('morgan')
 app.use(cors())
 app.use(express.urlencoded({ extended: true }))
 
-mongoose.connect('mongodb+srv://FahmidSakib:1234@trello.wtcgwrf.mongodb.net/?retryWrites=true&w=majority', {
+mongoose.connect('mongodb+srv://IbrahimSaffi:jmk161651@tasks.tyvtipn.mongodb.net/?retryWrites=true&w=majority', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })

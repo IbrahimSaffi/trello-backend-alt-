@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const userModel = require('../models/user-model')
 const bcrypt = require('bcrypt')
@@ -31,9 +32,10 @@ router.post('/signin', async (req, res) => {
     const result = bcrypt.compareSync(password, existingUser.password)
     if (result) {
         const payload = { _id: existingUser._id, name: existingUser.name, email: email.toLowerCase() }
-        const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRATION_TIME })
-        const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXPIRATION_TIME })
-        return res.status(200).json({ data: { refreshToken, accessToken, payload } })
+        console.log(payload)
+        const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1h" })
+        const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "10d" })
+        return res.status(200).json({ data: { refreshToken, accessToken, profile:payload } })
     }
     else return res.status(400).json({ error: 'Wrong Password' })
 })
@@ -41,7 +43,7 @@ router.post('/signin', async (req, res) => {
 router.post('/token', async (req, res) => {
     const refreshToken = req.body.refreshToken
     try {
-        const payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
+        const payload =  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
         delete payload.exp
         delete payload.iat
         const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXPIRATION_TIME })
