@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken')
 const morgan = require('morgan')
 
 
-app.use(cors())
+app.use(cors({origin:"*"}))
 app.use(express.urlencoded({ extended: true }))
 
 mongoose.connect('mongodb+srv://IbrahimSaffi:jmk161651@tasks.tyvtipn.mongodb.net/?retryWrites=true&w=majority', {

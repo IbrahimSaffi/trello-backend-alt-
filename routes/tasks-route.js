@@ -64,6 +64,7 @@ router.get('/get-all-user', async (req, res) => {
 })
 router.post('/update/:id',async(req,res)=>{
     let task =await taskModel.findOne({id:ObjectId(req.params.id)})
+    console.log(req.params.id)
     console.log(task)
     const {status} = req.body
     console.log(status)
