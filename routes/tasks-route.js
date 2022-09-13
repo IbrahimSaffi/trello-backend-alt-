@@ -63,7 +63,7 @@ router.get('/get-all-user', async (req, res) => {
     return res.status(200).json({ data: users })
 })
 router.post('/update/:id',async(req,res)=>{
-    let task =await taskModel.findOne({id:ObjectId(req.params.id)})
+    let task =await taskModel.findOne({_id:ObjectId(req.params.id)})
     console.log(req.params.id)
     console.log(task)
     const {status} = req.body
@@ -71,7 +71,7 @@ router.post('/update/:id',async(req,res)=>{
     if(!status){
         return res.status(400).json({error:"No updated status given"})
     }
-    await taskModel.findOneAndUpdate({id:ObjectId(req.params.id)},{status:status})
+    await taskModel.findOneAndUpdate({_id:ObjectId(req.params.id)},{status:status})
 })
 
 module.exports = router
